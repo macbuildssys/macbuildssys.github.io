@@ -1,0 +1,843 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Brian Mack. Security Engineer | DevSecOps Engineer | Product Security Engineer</title>
+<meta name="description" content="Brian Mack. Security Engineer, specialising in software supply-chain security, vulnerability management and application security.">
+
+<!-- Open Graph tags -->
+<meta property="og:title" content="Brian Mack. Security Engineer">
+<meta property="og:description" content="Security engineer specialising in supply-chain security, vulnerability management and application security.">
+<meta property="og:image" content="assets/photo.jpg">
+<meta property="og:type" content="website">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+  :root{
+    --bg: #0e1620;
+    --bg-soft: #0b121a;
+    --surface: #141f2b;
+    --surface-2: #17232f;
+    --border: #223142;
+    --text: #e8edf3;
+    --text-muted: #8b97a7;
+    --accent: #4fd1ae;
+    --accent-dim: #2f6f60;
+    --accent-warm: #e8a33d;
+    --danger: #e2777d;
+    --radius: 10px;
+    --maxw: 880px;
+    --mono: 'JetBrains Mono', ui-monospace, monospace;
+    --sans: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  }
+
+  *{ box-sizing: border-box; }
+  html{ scroll-behavior: smooth; }
+  @media (prefers-reduced-motion: reduce){
+    html{ scroll-behavior: auto; }
+    *{ animation: none !important; transition: none !important; }
+  }
+
+  body{
+    margin: 0;
+    background: var(--bg);
+    background-image: radial-gradient(circle at 50% -10%, rgba(79,209,174,0.08), transparent 45%);
+    color: var(--text);
+    font-family: var(--sans);
+    line-height: 1.65;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  a{ color: var(--accent); text-decoration: none; }
+  a:hover{ text-decoration: underline; }
+  a:focus-visible, button:focus-visible{
+    outline: 2px solid var(--accent);
+    outline-offset: 3px;
+    border-radius: 4px;
+  }
+
+  .skip-link{
+    position: absolute;
+    left: -999px;
+    top: auto;
+    background: var(--accent);
+    color: #06231c;
+    padding: 0.6rem 1rem;
+    border-radius: 6px;
+    font-family: var(--mono);
+    font-weight: 600;
+    z-index: 100;
+  }
+  .skip-link:focus{ left: 1rem; top: 1rem; }
+
+  .wrap{
+    max-width: var(--maxw);
+    margin: 0 auto;
+    padding: 0 1.5rem;
+  }
+
+  /* ---- Nav ---- */
+  header.site-nav{
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    background: rgba(14,22,32,0.85);
+    backdrop-filter: blur(8px);
+    border-bottom: 1px solid var(--border);
+  }
+  .nav-inner{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.9rem 1.5rem;
+    max-width: var(--maxw);
+    margin: 0 auto;
+  }
+  .nav-mark{
+    font-family: var(--mono);
+    font-weight: 700;
+    color: var(--text);
+    letter-spacing: -0.02em;
+  }
+  .nav-mark span{ color: var(--accent); }
+  nav.nav-links{
+    display: flex;
+    gap: 1.25rem;
+    flex-wrap: wrap;
+  }
+  nav.nav-links a{
+    font-family: var(--mono);
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    text-transform: lowercase;
+  }
+  nav.nav-links a:hover{ color: var(--accent); text-decoration: none; }
+
+  /* ---- Hero ---- */
+  .hero{
+    padding: 4.5rem 0 3.5rem;
+    text-align: center;
+  }
+  .eyebrow{
+    font-family: var(--mono);
+    font-size: 0.85rem;
+    color: var(--accent);
+    letter-spacing: 0.06em;
+    margin-bottom: 1.5rem;
+  }
+
+  .photo-frame{
+    width: 148px;
+    height: 148px;
+    margin: 0 auto 1.75rem;
+    border-radius: 50%;
+    padding: 4px;
+    background: linear-repeat, var(--surface);
+    border: 1px solid var(--accent-dim);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+  }
+  .photo-frame img{
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 50%;
+    display: block;
+  }
+  .photo-fallback{
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    font-family: var(--mono);
+    font-size: 2.6rem;
+    font-weight: 700;
+    color: var(--accent);
+    background: var(--surface-2);
+  }
+  .photo-frame.no-photo img{ display: none; }
+  .photo-frame.no-photo .photo-fallback{ display: flex; }
+
+  h1.name{
+    font-family: var(--mono);
+    font-weight: 800;
+    font-size: clamp(2.4rem, 7vw, 3.8rem);
+    letter-spacing: -0.03em;
+    margin: 0 0 1rem;
+  }
+
+  .verify-badge{
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-family: var(--mono);
+    font-size: 0.85rem;
+    color: var(--accent);
+    border: 1px solid var(--accent-dim);
+    background: rgba(79,209,174,0.07);
+    padding: 0.35rem 0.9rem;
+    border-radius: 999px;
+    margin-bottom: 1.5rem;
+  }
+
+  .tagline{
+    font-size: 1.15rem;
+    color: var(--text);
+    max-width: 620px;
+    margin: 0 auto 1rem;
+    font-weight: 500;
+  }
+
+  .summary{
+    color: var(--text-muted);
+    max-width: 600px;
+    margin: 0 auto 2rem;
+    font-size: 1rem;
+  }
+
+  .cta-row{
+    display: flex;
+    gap: 0.9rem;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+  .btn{
+    font-family: var(--mono);
+    font-size: 0.9rem;
+    font-weight: 600;
+    padding: 0.7rem 1.4rem;
+    border-radius: 8px;
+    border: 1px solid var(--border);
+    transition: border-color 0.2s ease, transform 0.15s ease;
+    display: inline-block;
+  }
+  .btn:hover{ text-decoration: none; transform: translateY(-1px); }
+  .btn-primary{
+    background: var(--accent);
+    color: #06231c;
+    border-color: var(--accent);
+  }
+  .btn-primary:hover{ background: #62dbba; }
+  .btn-ghost{
+    color: var(--text);
+    background: transparent;
+  }
+  .btn-ghost:hover{ border-color: var(--accent); color: var(--accent); }
+
+  /* ---- Sections ---- */
+  section{
+    padding: 3.25rem 0;
+    border-top: 1px solid var(--border);
+  }
+  .section-eyebrow{
+    font-family: var(--mono);
+    font-size: 0.8rem;
+    color: var(--accent);
+    margin-bottom: 0.4rem;
+  }
+  h2.section-title{
+    font-family: var(--mono);
+    font-size: 1.5rem;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    margin: 0 0 1.75rem;
+  }
+
+  .reveal{
+    opacity: 0;
+    transform: translateY(14px);
+    transition: opacity 0.6s ease, transform 0.6s ease;
+  }
+  .reveal.in-view{
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* About */
+  .about-grid{
+    display: grid;
+    grid-template-columns: 1.3fr 1fr;
+    gap: 2.5rem;
+  }
+  .about-grid p{ color: var(--text-muted); margin-top: 0; }
+  .module-list{
+    margin: 0 0 1.25rem;
+    padding-left: 1.4rem;
+    color: var(--text-muted);
+    display: flex;
+    flex-direction: column;
+    gap: 0.45rem;
+    font-size: 0.95rem;
+  }
+  .module-list li::marker{
+    color: var(--accent);
+    font-family: var(--mono);
+    font-weight: 600;
+  }
+  .fact-list{
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+  .fact-list li{
+    font-size: 0.92rem;
+  }
+  .fact-list .fact-label{
+    display: block;
+    font-family: var(--mono);
+    font-size: 0.72rem;
+    color: var(--accent);
+    letter-spacing: 0.05em;
+    margin-bottom: 0.2rem;
+  }
+  .fact-list .fact-value{ color: var(--text); }
+  .fact-list .fact-sub{ color: var(--text-muted); font-size: 0.85rem; }
+
+  @media (max-width: 680px){
+    .about-grid{ grid-template-columns: 1fr; }
+  }
+
+  /* Skills */
+  .chip-group{ margin-bottom: 1.5rem; }
+  .chip-group h3{
+    font-family: var(--mono);
+    font-size: 0.78rem;
+    color: var(--text-muted);
+    font-weight: 500;
+    letter-spacing: 0.04em;
+    margin: 0 0 0.75rem;
+    text-transform: uppercase;
+  }
+  .chips{
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+  .chip{
+    font-family: var(--mono);
+    font-size: 0.82rem;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    color: var(--text);
+    padding: 0.4rem 0.8rem;
+    border-radius: 6px;
+  }
+  .chip.chip-progress{
+    color: var(--accent-warm);
+    border-color: rgba(232,163,61,0.35);
+    background: rgba(232,163,61,0.06);
+  }
+
+  /* Projects */
+  .project-grid{
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1.1rem;
+    margin-bottom: 1.75rem;
+  }
+  .project-card{
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 1.25rem;
+    transition: border-color 0.2s ease;
+  }
+  .project-card:hover{ border-color: var(--accent-dim); }
+  .project-card h3{
+    margin: 0 0 0.5rem;
+    font-family: var(--mono);
+    font-size: 1rem;
+  }
+  .project-card h3 a{ color: var(--text); }
+  .project-card h3 a:hover{ color: var(--accent); }
+  .project-card p{
+    margin: 0;
+    color: var(--text-muted);
+    font-size: 0.88rem;
+  }
+
+  /* Research */
+  .paper{
+    padding: 1.1rem 0;
+    border-bottom: 1px solid var(--border);
+  }
+  .paper:last-child{ border-bottom: none; }
+  .paper h3{
+    font-family: var(--mono);
+    font-size: 0.98rem;
+    margin: 0 0 0.4rem;
+    font-weight: 600;
+  }
+  .paper p{ margin: 0.3rem 0 0; color: var(--text-muted); font-size: 0.88rem; }
+  .paper-tag{
+    display: inline-block;
+    font-family: var(--mono);
+    font-size: 0.7rem;
+    color: var(--accent);
+    border: 1px solid var(--accent-dim);
+    padding: 0.15rem 0.5rem;
+    border-radius: 4px;
+    margin-bottom: 0.5rem;
+  }
+
+  /* Interests */
+  .interest-list{
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 0.9rem;
+  }
+  .interest-list li{
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 1rem 1.1rem;
+    font-size: 0.9rem;
+    color: var(--text-muted);
+  }
+
+  /* Contact */
+  .contact-row{
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+    align-items: center;
+  }
+  .contact-note{
+    color: var(--text-muted);
+    font-size: 0.85rem;
+    margin-top: 1.25rem;
+  }
+  .contact-note code{
+    font-family: var(--mono);
+    background: var(--surface);
+    padding: 0.1rem 0.4rem;
+    border-radius: 4px;
+    color: var(--accent-warm);
+  }
+
+  .social-icon{
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 42px;
+    height: 42px;
+    border-radius: 8px;
+    border: 1px solid var(--border);
+    color: var(--text-muted);
+    transition: color 0.2s ease, border-color 0.2s ease;
+  }
+  .social-icon svg{ width: 20px; height: 20px; fill: currentColor; }
+  .social-icon:hover{ color: var(--accent); border-color: var(--accent-dim); text-decoration: none; }
+
+  .qr-card{
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.5rem 0.75rem;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    background: var(--surface);
+    color: var(--text-muted);
+    font-family: var(--mono);
+    font-size: 0.78rem;
+    line-height: 1.3;
+  }
+  .qr-card img{
+    background: #fff;
+    padding: 4px;
+    border-radius: 6px;
+    display: block;
+  }
+  .qr-card:hover{ border-color: var(--accent-dim); color: var(--accent); text-decoration: none; }
+
+  .contact-form{
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    max-width: 480px;
+    margin-top: 1.5rem;
+  }
+  .form-row{
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+  }
+  .form-row label{
+    font-family: var(--mono);
+    font-size: 0.78rem;
+    color: var(--text-muted);
+    letter-spacing: 0.03em;
+  }
+  .form-row input, .form-row textarea{
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    color: var(--text);
+    font-family: var(--sans);
+    font-size: 0.92rem;
+    padding: 0.6rem 0.75rem;
+    resize: vertical;
+  }
+  .form-row input:focus, .form-row textarea:focus{
+    outline: none;
+    border-color: var(--accent);
+  }
+  .form-row input[aria-invalid="true"], .form-row textarea[aria-invalid="true"]{
+    border-color: var(--danger);
+  }
+  .form-error{
+    display: block;
+    font-family: var(--mono);
+    font-size: 0.78rem;
+    color: var(--danger);
+  }
+  .form-notice{
+    font-family: var(--mono);
+    font-size: 0.85rem;
+  }
+  .form-notice:empty{ display: none; }
+  .form-notice-success{ color: var(--accent); }
+  .form-notice-error{ color: var(--danger); }
+  .contact-form button{
+    align-self: flex-start;
+    cursor: pointer;
+  }
+
+  footer{
+    padding: 2.5rem 0 3rem;
+    text-align: center;
+    color: var(--text-muted);
+    font-family: var(--mono);
+    font-size: 0.78rem;
+  }
+
+  /* Footer marquee */
+  .marquee{
+    position: relative;
+    overflow: hidden;
+    width: 100%;
+    max-width: 360px;
+    height: 68px;
+    margin: 2rem auto 0;
+  }
+  .marquee img{
+    position: absolute;
+    top: 50%;
+    left: 100%;
+    height: 52px;
+    width: auto;
+    transform: translateY(-50%);
+    opacity: 0.9;
+    animation: marquee-slide 9s linear infinite;
+  }
+  @keyframes marquee-slide{
+    from{ left: 100%; }
+    to{ left: -210px; }
+  }
+  @media (prefers-reduced-motion: reduce){
+    .marquee img{ animation: none; left: 50%; transform: translate(-50%, -50%); }
+  }
+</style>
+</head>
+<body>
+
+<a class="skip-link" href="#main">Skip to content</a>
+
+<header class="site-nav">
+  <div class="nav-inner">
+    <div class="nav-mark">brianmack<span>.</span></div>
+    <nav class="nav-links" aria-label="Section navigation">
+      <a href="#about">about</a>
+      <a href="#skills">skills</a>
+      <a href="#projects">projects</a>
+      <a href="#research">research</a>
+      <a href="#interests">interests</a>
+      <a href="#contact">contact</a>
+    </nav>
+  </div>
+</header>
+
+<main id="main">
+
+  <section class="hero wrap">
+    <div class="eyebrow">Profile</div>
+
+
+    <div class="photo-frame" id="photoFrame">
+      <img id="profilePhoto" src="assets/photo.jpg" alt="Portrait of Brian Mack">
+      <div class="photo-fallback">B</div>
+    </div>
+
+    <h1 class="name">Brian Mack</h1>
+    <div class="verify-badge">✓ Security engineer </div>
+    <div class="verify-badge">✓ DevSecOps engineer </div>
+    <div class="verify-badge">✓ Product security engineer </div>
+
+
+    <p class="summary">I am a security engineer with experience in DevSecOps and product security. My expertise involves software supply-chain security, vulnerability management, and application security. I am currently enrolled in an MSc programme in Advanced Computer Science (Cybersecurity), with a growing focus on the intersection of AI and access management.</p>
+
+  </section>
+
+  <section id="about">
+    <div class="wrap reveal">
+      <div class="section-eyebrow"> About Me</div>
+      <h2 class="section-title">Background</h2>
+      <div class="about-grid">
+        <p>
+          My professional journey has taken me through several distinct fields before leading me to cybersecurity. Starting out in customer relationship management systems, I then moved into telecommunications before eventually finding my footing in cybersecurity. This unusual route has given me a well-rounded, almost restless curiosity about how organisations actually function beneath their processes and policies. That curiosity turned into a specialism: software supply chain security, vulnerability management and application security. These are the quieter disciplines that keep systems trustworthy long after they have been shipped. I am now building on this foundation by studying for an MSc Advanced Computer Science with a focus on cybersecurity at the University of Hertfordshire. So far, I have excelled in the following modules:
+        </p>
+        <ol class="module-list">
+          <li>Advanced Algorithms and Paradigms</li>
+          <li>Distributed Systems Security</li>
+          <li>Machine Learning</li>
+          <li>Penetration Testing</li>
+        </ol>
+        <p>
+          My focus area lies at the edge of that discipline, in how AI algorithms and access management might be brought closer together to build systems that respond more intelligently to context.
+        </p>
+        <ul class="fact-list">
+          <li>
+            <span class="fact-label">Education</span>
+            <span class="fact-value">MSc Advanced Computer Science, cybersecurity</span><br>
+            <span class="fact-sub">University of Hertfordshire, in progress since January 2026</span>
+          </li>
+          <li>
+            <span class="fact-value">BSc Mathematics and Computer Science</span><br>
+            <span class="fact-sub">Jomo Kenyatta University of Agriculture and Technology</span>
+          </li>
+
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section id="skills">
+    <div class="wrap reveal">
+      <div class="section-eyebrow"> Skills</div>
+      <h2 class="section-title">Technical skills</h2>
+
+      <div class="chip-group">
+        <h3>Programming</h3>
+        <div class="chips">
+          <span class="chip">Python</span>
+          <span class="chip">C++</span>
+          <span class="chip">JavaScript</span>
+          <span class="chip">Bash</span>
+        </div>
+      </div>
+
+      <div class="chip-group">
+        <h3>Security</h3>
+        <div class="chips">
+          <span class="chip">STRIDE</span>
+          <span class="chip">MITRE ATT&CK</span>
+          <span class="chip">Zero Trust</span>
+          <span class="chip">Penetration Testing</span>
+          <span class="chip">PKI</span>
+          <span class="chip">Applied Cryptography</span>
+          <span class="chip">Malware Analysis</span>
+          <span class="chip">Applied AI</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="projects">
+    <div class="wrap reveal">
+      <div class="section-eyebrow"> Projects</div>
+      <h2 class="section-title">Open-source</h2>
+      <p style="color: var(--text-muted); margin: 0 0 1.5rem; max-width: 600px;">
+         In my leisure time, I maintain a handful of security and system tools.
+      </p>
+      <div class="project-grid">
+        <div class="project-card">
+          <h3><a href="https://github.com/macbuildssys/mime-filter" target="_blank" rel="noopener">mime-filter</a></h3>
+          <p>Brings the MIME-type and content-signature verification used in email servers, secure web gateways and firewalls to the browser itself, applying that same layer of defence to everyday downloads.</p>
+        </div>
+        <div class="project-card">
+          <h3><a href="https://github.com/macbuildssys/LocalChat" target="_blank" rel="noopener">LocalChat</a></h3>
+          <p>A fully offline LLM interface for your own Ollama models. No cloud, no subscriptions, no API costs, just local AI on your own terms.</p>
+        </div>
+        <div class="project-card">
+          <h3><a href="https://github.com/macbuildssys/vulnscope" target="_blank" rel="noopener">vulnscope</a></h3>
+          <p>An ML pipeline analysing NVD supply-chain CVE trends from 2015 to 2026, using linear regression, logistic regression and random forest models to forecast emerging weakness categories.</p>
+        </div>
+        <div class="project-card">
+          <h3><a href="https://github.com/macbuildssys/dockerfile-hardener" target="_blank" rel="noopener">dockerfile-hardener</a></h3>
+          <p>A CLI tool that analyses Dockerfiles for security misconfigurations, applies auto-fixes where possible, and produces reports in table, JSON, SARIF and HTML formats, covering ten hardening rules.</p>
+        </div>
+        <div class="project-card">
+          <h3><a href="https://github.com/macbuildssys/secret-scanner" target="_blank" rel="noopener">secret-scanner</a></h3>
+          <p>Combines regex pattern matching with Shannon entropy scoring to detect hardcoded credentials while suppressing false positives, outputting SARIF 2.1.0 for GitHub's Security tab.</p>
+        </div>
+        <div class="project-card">
+          <h3><a href="https://github.com/macbuildssys/spectre-meltdown" target="_blank" rel="noopener">spectre-meltdown</a></h3>
+          <p>Parses spectre-meltdown-checker output into a structured HTML report, mapping CPU-level exposure to kernel mitigation status across Spectre, Meltdown, MDS and related microarchitectural side-channel issues.</p>
+        </div>
+      </div>
+      <div class="cta-row" style="justify-content: flex-start; align-items: center;">
+        <a class="btn btn-primary" href="https://github.com/macbuildssys?tab=repositories" target="_blank" rel="noopener">See all repositories on GitHub</a>
+        <a class="qr-card" href="https://chromewebstore.google.com/detail/mime-filter/bhiclkpfmnjdemhamopgimkohlppbojb" target="_blank" rel="noopener" aria-label="Open MIME Filter on the Chrome Web Store">
+          <img src="assets/mime-filter-qr.png" alt="QR code linking to MIME Filter on the Chrome Web Store" width="88" height="88">
+          <span>MIME Filter<br>Chrome Web Store</span>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <section id="research">
+    <div class="wrap reveal">
+      <div class="section-eyebrow"> Research</div>
+      <h2 class="section-title">Research</h2>
+
+      <div class="paper">
+        <span class="paper-tag">Pre-print, pending review</span>
+        <h3>Purity as a Parallelisation Contract: Formal Composability Guarantees and Empirical Throughput in Python and Rust Data Pipelines</h3>
+        <p><a href="https://doi.org/10.5281/zenodo.21420325" target="_blank" rel="noopener">DOI: 10.5281/zenodo.21420325</a> · posted to SSRN and ResearchGate</p>
+      </div>
+
+      <p class="contact-note">I also write about recent advancements in technology on <a href="https://medium.com/@brianmack_42366" target="_blank" rel="noopener">Medium</a>.</p>
+    </div>
+  </section>
+
+  <section id="interests">
+    <div class="wrap reveal">
+      <div class="section-eyebrow"> Interests</div>
+      <h2 class="section-title">Interests</h2>
+      <ul class="interest-list">
+        <li>Threat modelling and architectural defence</li>
+        <li>Secure local inference</li>
+        <li>Software Supply Chain and program analysis</li>
+        <li>End-to-end encryption</li>
+        <li>Algorithms</li>
+        <li>Distributed systems</li>
+
+      </ul>
+    </div>
+  </section>
+
+  <section id="contact">
+    <div class="wrap reveal">
+      <div class="section-eyebrow">Contact</div>
+      <h2 class="section-title">Get in touch</h2>
+      <div class="contact-row">
+        <button type="button" id="emailMeToggle" class="btn btn-primary" aria-expanded="false" aria-controls="contactFormWrapper">Email me</button>
+        <a class="social-icon" href="https://www.linkedin.com/in/brian-mack-dev-25-mc" target="_blank" rel="noopener" aria-label="LinkedIn profile">
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <rect x="2" y="8.5" width="4" height="13" rx="0.6"/>
+            <circle cx="4" cy="4" r="2.3"/>
+            <path d="M9 8.5h4v2.2c0.9-1.6 2.6-2.6 4.5-2.6 3.6 0 5.5 2.3 5.5 6.4V21.5h-4v-6.4c0-2-0.8-3.2-2.4-3.2-1.5 0-2.6 1.1-2.6 3.2V21.5h-4z"/>
+          </svg>
+        </a>
+      </div>
+
+      <!-- Submissions happen without leaving the page -->
+      <div id="contactFormWrapper" hidden>
+        <form id="contactForm" class="contact-form" action="https://formspree.io/f/mnpqnzen" method="POST">
+          <div data-fs-success class="form-notice form-notice-success"></div>
+          <div data-fs-error class="form-notice form-notice-error"></div>
+
+          <div class="form-row">
+            <label for="cf-name">Name</label>
+            <input type="text" id="cf-name" name="name" data-fs-field required>
+          </div>
+          <div class="form-row">
+            <label for="cf-email">Your email</label>
+            <input type="email" id="cf-email" name="email" data-fs-field required>
+            <span data-fs-error="email" class="form-error"></span>
+          </div>
+          <div class="form-row">
+            <label for="cf-message">Message</label>
+            <textarea id="cf-message" name="message" rows="5" data-fs-field required></textarea>
+            <span data-fs-error="message" class="form-error"></span>
+          </div>
+          <!-- honeypot field: hidden from people, catches simple spam bots -->
+          <input type="text" name="_gotcha" style="display:none" tabindex="-1" autocomplete="off">
+          <button type="submit" data-fs-submit-btn class="btn btn-primary">Send message</button>
+        </form>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <br>
+  © 2026 Brian Mack
+
+  <!-- Decorative sliding logo mark -->
+  <div class="marquee" aria-hidden="true">
+    <img src="assets/m1.png" alt="">
+  </div>
+</footer>
+
+<script>
+  // Photo fallback
+  (function(){
+    var frame = document.getElementById('photoFrame');
+    var img = document.getElementById('profilePhoto');
+    img.addEventListener('error', function(){
+      frame.classList.add('no-photo');
+    });
+  })();
+
+  // Gentle scroll-reveal for sections, skipped entirely if the user prefers reduced motion
+  (function(){
+    var prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    var targets = document.querySelectorAll('.reveal');
+    if (prefersReduced || !('IntersectionObserver' in window)) {
+      targets.forEach(function(el){ el.classList.add('in-view'); });
+      return;
+    }
+    var observer = new IntersectionObserver(function(entries){
+      entries.forEach(function(entry){
+        if (entry.isIntersecting) {
+          entry.target.classList.add('in-view');
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.12 });
+    targets.forEach(function(el){ observer.observe(el); });
+  })();
+
+  // Reveal the contact form only when "Email me" is clicked
+  (function(){
+    var toggleBtn = document.getElementById('emailMeToggle');
+    var wrapper = document.getElementById('contactFormWrapper');
+    if (!toggleBtn || !wrapper) return;
+    toggleBtn.addEventListener('click', function(){
+      var willOpen = wrapper.hidden;
+      wrapper.hidden = !willOpen;
+      toggleBtn.setAttribute('aria-expanded', willOpen ? 'true' : 'false');
+      if (willOpen) {
+        wrapper.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        var nameField = document.getElementById('cf-name');
+        if (nameField) nameField.focus();
+      }
+    });
+  })();
+</script>
+
+<!-- Formspree AJAX library: handles the contact form submission -->
+<script>
+  window.formspree = window.formspree || function () { (formspree.q = formspree.q || []).push(arguments); };
+  formspree('initForm', { formElement: '#contactForm', formId: 'mnpqnzen' });
+</script>
+<script src="https://unpkg.com/@formspree/ajax@1" defer></script>
+
+</body>
+</html>
