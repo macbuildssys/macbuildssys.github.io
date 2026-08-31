@@ -1,0 +1,1599 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Brian Mack | Security Engineer | DevSecOps Engineer | Product Security Engineer</title>
+<meta name="description" content="Brian Mack. Security Engineer, specialising in software supply chain security, vulnerability assessment and management and application security.">
+<meta name="theme-color" content="#F5F7FF">
+
+<!-- Open Graph tags: edit the og:url once your GitHub Pages site is live -->
+<meta property="og:title" content="Brian Mack. Security Engineer">
+<meta property="og:description" content="Security engineer specialising in supply chain security, vulnerability assessment and management and application security.">
+<meta property="og:image" content="assets/photo.jpg">
+<meta property="og:type" content="website">
+
+<script>
+  /* Set the theme before first paint. Light is the default. */
+  (function () {
+    var t = null;
+    try { t = localStorage.getItem('bm-theme'); } catch (e) {}
+    if (t !== 'dark' && t !== 'light') t = 'light';
+    document.documentElement.setAttribute('data-theme', t);
+  })();
+</script>
+
+
+<noscript>
+  <style>
+    .redact{ color: #071A24 !important; background: var(--grad); }
+    .redact::after{ display: none !important; }
+  </style>
+</noscript>
+
+<style>
+  /* Fonts are files in assets/fonts, so they load from your own site and never from a third party. */
+  @font-face{ font-family: 'Inter'; src: url(assets/fonts/inter.woff2) format('woff2'); font-weight: 100 900; font-style: normal; font-display: swap; }
+  @font-face{ font-family: 'JetBrains Mono'; src: url(assets/fonts/jetbrains-mono.woff2) format('woff2'); font-weight: 100 800; font-style: normal; font-display: swap; }
+
+  :root{
+    --bg: #0E1620;
+    --surface: #152232;
+    --surface-2: #1B2C40;
+    --ink: #EAF1F8;
+    --muted: #9AAEC2;
+    --line: rgba(255,255,255,0.1);
+    --pop: #4FE3C1;
+    --brand-ink: #5BE3C3;
+    --focus: #7DE8D0;
+    --on-grad: #071A24;
+    --grad: linear-gradient(100deg, #4FE3C1 0%, #5BB8FF 58%, #A48BFF 100%);
+    --tape: linear-gradient(90deg, #7C5CFF, #FF5C93);
+    --img-bg: #0E1620;
+    --glow: 0 24px 60px -24px rgba(91,184,255,0.55);
+    --head: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, 'Liberation Sans', Helvetica, sans-serif;
+    --display: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, 'Liberation Sans', Helvetica, sans-serif;
+    --sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, 'Liberation Sans', Helvetica, sans-serif;
+    --mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Consolas, 'Liberation Mono', monospace;
+    --ws-body: 0em;   /* gap between words in paragraphs, 0 is the font's normal gap */
+    --ws-ui: -0.02em;     /* gap between words in buttons, boxes and menu items */
+    --ws-head: -0.05em;    /* gap between words in headings, more negative means closer */
+    --rail: 232px;
+    --r: 14px;
+    --r-lg: 22px;
+  }
+  [data-theme="light"]{
+    --bg: #F5F7FF;
+    --surface: #FFFFFF;
+    --surface-2: #EBF0FF;
+    --ink: #0E1620;
+    --muted: #46566A;
+    --line: rgba(14,22,32,0.12);
+    --pop: #10B98C;
+    --brand-ink: #0A7A66;
+    --focus: #5B3DF5;
+    --glow: 0 24px 60px -24px rgba(91,61,245,0.4);
+  }
+
+  *{ box-sizing: border-box; }
+  html{ scroll-behavior: smooth; }
+  @media (prefers-reduced-motion: reduce){
+    html{ scroll-behavior: auto; }
+    *, *::before, *::after{ animation: none !important; transition: none !important; }
+  }
+
+  body{
+    margin: 0;
+    background: var(--bg);
+    color: var(--ink);
+    font-family: var(--sans);
+    font-size: 1.02rem;
+    line-height: 1.7;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  a{ color: var(--brand-ink); text-underline-offset: 0.2em; }
+  a:hover{ color: var(--ink); }
+  a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visible{
+    outline: 3px solid var(--focus);
+    outline-offset: 3px;
+    border-radius: 8px;
+  }
+
+  .skip-link{
+    position: absolute; left: -999px; top: auto;
+    background: var(--grad); color: var(--on-grad);
+    padding: 0.6rem 1rem; border-radius: 10px;
+    font-family: var(--display); font-weight: 600; z-index: 100;
+  }
+  .skip-link:focus{ left: 1rem; top: 1rem; }
+
+  /* Layout: side rail on wide screens, top bar on small ones */
+  .shell{
+    display: grid;
+    grid-template-columns: var(--rail) minmax(0, 1fr);
+    min-height: 100vh;
+  }
+  .rail{
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    height: 100dvh;
+    padding: 2rem 1.25rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+  .rail-mark{
+    align-self: flex-start;
+    font-family: var(--display);
+    font-weight: 800;
+    font-size: 1.25rem;
+    color: var(--on-grad);
+    background: var(--grad);
+    padding: 0.35rem 0.7rem;
+    border-radius: 12px;
+    text-decoration: none;
+    box-shadow: var(--glow);
+  }
+  .rail-mark:hover{ color: var(--on-grad); }
+  .rail-nav ul{ list-style: none; margin: 0; padding: 0; display: grid; gap: 0.2rem; }
+  .rail-nav a{
+    display: block;
+    padding: 0.5rem 0.9rem;
+    border-radius: 999px;
+    font-family: var(--display);
+    font-weight: 500;
+    font-size: 1.02rem;
+    color: var(--muted);
+    text-decoration: none;
+    transition: background-color 0.2s ease, color 0.2s ease;
+  }
+  .rail-nav a:hover{ color: var(--ink); background: var(--surface); }
+  .rail-nav a[aria-current="true"]{
+    color: var(--on-grad);
+    background: var(--grad);
+    font-weight: 700;
+  }
+  .rail-tools{ display: flex; flex-direction: column; gap: 0.6rem; align-items: flex-start; }
+
+  .tool{
+    font-family: var(--display);
+    font-size: 0.92rem;
+    font-weight: 500;
+    color: var(--ink);
+    background: var(--surface);
+    border: 1px solid var(--line);
+    padding: 0.5rem 0.9rem;
+    border-radius: 999px;
+    cursor: pointer;
+    display: inline-flex;
+    gap: 0.6rem;
+    align-items: center;
+    transition: border-color 0.2s ease;
+  }
+  .tool:hover{ border-color: var(--pop); }
+  .tool kbd{
+    font-family: var(--display);
+    font-size: 0.78rem;
+    color: var(--muted);
+    border-left: 1px solid var(--line);
+    padding-left: 0.6rem;
+  }
+
+  .main{
+    padding: 0 clamp(1.25rem, 5vw, 4.5rem);
+    max-width: 1060px;
+    width: 100%;
+  }
+
+  @media (max-width: 899px){
+    .shell{ display: block; }
+    .rail{
+      height: auto;
+      flex-direction: row;
+      align-items: center;
+      padding: 0.75rem 1.25rem;
+      background: var(--bg);
+      border-bottom: 1px solid var(--line);
+      z-index: 20;
+    }
+    .rail-nav{ display: none; }
+    .rail-tools{ flex-direction: row; }
+    .tool kbd{ display: none; }
+  }
+
+  /* Redactions: bright tape covers the text until it is revealed */
+  .redact{
+    appearance: none;
+    -webkit-appearance: none;
+    border: 0;
+    background: transparent;
+    font: inherit;
+    color: transparent;
+    padding: 0 0.12em;
+    margin: 0 -0.12em;
+    letter-spacing: inherit;
+    word-spacing: inherit;
+    border-radius: 8px;
+    cursor: pointer;
+    position: relative;
+    display: inline-block;
+    text-align: left;
+    transition: color 0.3s ease 0.2s;
+  }
+  .redact::after{
+    content: "";
+    position: absolute;
+    inset: 0.06em 0 0.02em 0;
+    border-radius: 8px;
+    background: var(--tape);
+    transform-origin: 100% 50%;
+    transition: transform 0.55s cubic-bezier(0.7, 0, 0.2, 1);
+  }
+  .redact.open{
+    color: var(--on-grad);
+    background: var(--grad);
+  }
+  .redact.open::after{ transform: scaleX(0); }
+  @media (hover: hover){
+    .redact:not(.open):hover{ color: var(--ink); }
+    .redact:not(.open):hover::after{ transform: scaleX(0); }
+  }
+
+  /* Hero */
+  .hero{
+    position: relative;
+    isolation: isolate;
+    min-height: 88vh;
+    padding: 4.5rem 0 2rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 2.25rem;
+  }
+  .hero::before{
+    content: "";
+    position: absolute;
+    inset: -8% -30% auto -12%;
+    height: 75%;
+    background:
+      radial-gradient(38% 52% at 18% 30%, rgba(79,227,193,0.22), transparent 70%),
+      radial-gradient(34% 46% at 78% 22%, rgba(139,92,255,0.24), transparent 70%),
+      radial-gradient(28% 40% at 55% 70%, rgba(255,92,147,0.14), transparent 70%);
+    z-index: -1;
+    pointer-events: none;
+  }
+  .hero-top{
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    gap: 2rem;
+    flex-wrap: wrap;
+  }
+  h1.name{
+    margin: 0;
+    font-family: var(--display);
+    font-size: clamp(4.2rem, 15vw, 10.5rem);
+    line-height: 0.88;
+    font-variation-settings: "wght" 640;
+    transition: color 0.2s ease;
+    font-optical-sizing: auto;
+  }
+  h1.name .word{ display: block; white-space: nowrap; }
+  h1.name .ch{
+    display: inline-block;
+    transition: font-variation-settings 0.18s ease-out, color 0.18s ease-out;
+  }
+
+  /* Portrait: gradient ring, rounded corners, dark tile that matches your images */
+  .portrait{
+    width: 184px;
+    height: 184px;
+    margin: 0;
+    flex: none;
+    position: relative;
+    padding: 4px;
+    border-radius: 34px;
+    background: var(--grad);
+    box-shadow: var(--glow);
+  }
+  .portrait .tile{
+    width: 100%; height: 100%;
+    border-radius: 30px;
+    overflow: hidden;
+    background: var(--img-bg);
+    position: relative;
+  }
+  .portrait img{
+    width: 100%; height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+  .photo-fallback{
+    position: absolute; inset: 0;
+    display: none;
+    align-items: center; justify-content: center;
+    font-family: var(--display);
+    font-weight: 800;
+    font-size: 4.4rem;
+    color: var(--pop);
+  }
+  .portrait.no-photo img{ display: none; }
+  .portrait.no-photo .photo-fallback{ display: flex; }
+
+  .roles{
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.7rem;
+    font-family: var(--display);
+    font-weight: 600;
+    font-size: clamp(1.05rem, 2vw, 1.3rem);
+    line-height: 1.3;
+  }
+  .roles li{
+    display: inline-flex;
+    align-items: center;
+    gap: 0.65rem;
+    background: var(--surface);
+    border: 1px solid var(--line);
+    padding: 0.45rem 1.15rem 0.45rem 0.5rem;
+    border-radius: 999px;
+  }
+  .tick{
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 1.7rem;
+    height: 1.7rem;
+    flex: none;
+    border-radius: 50%;
+    background: var(--grad);
+    color: var(--on-grad);
+    font-size: 0.95rem;
+    font-weight: 800;
+    line-height: 1;
+  }
+
+  .redact-hint{ margin: -1.2rem 0 0; font-size: 0.88rem; color: var(--muted); }
+  .link-btn{
+    font: inherit;
+    color: var(--brand-ink);
+    background: none;
+    border: 0;
+    padding: 0;
+    cursor: pointer;
+    text-decoration: underline;
+    text-underline-offset: 0.2em;
+  }
+  .link-btn:hover{ color: var(--ink); }
+  .summary{
+    max-width: 41rem;
+    margin: 0;
+    font-size: 1.15rem;
+    line-height: 1.85;
+  }
+  .hero-note{
+    margin: 0;
+    max-width: 41rem;
+    color: var(--muted);
+    font-size: 0.95rem;
+  }
+  .hero-actions{ display: flex; gap: 0.8rem; flex-wrap: wrap; align-items: center; }
+
+  .btn{
+    font-family: var(--display);
+    font-weight: 600;
+    font-size: 1rem;
+    padding: 0.8rem 1.4rem;
+    border: 1px solid var(--line);
+    background: var(--surface);
+    color: var(--ink);
+    border-radius: 14px;
+    cursor: pointer;
+    text-decoration: none;
+    display: inline-block;
+    transition: transform 0.15s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+  }
+  .btn:hover{ transform: translateY(-2px); border-color: var(--pop); color: var(--ink); }
+  .btn-primary{
+    background: var(--grad);
+    color: var(--on-grad);
+    border-color: transparent;
+  }
+  .btn-primary:hover{ color: var(--on-grad); border-color: transparent; box-shadow: var(--glow); }
+  .btn-sm{ padding: 0.55rem 1.05rem; font-size: 0.94rem; border-radius: 12px; }
+  .btn:disabled{ opacity: 0.4; cursor: default; transform: none; }
+
+  /* Sections */
+  section.block{
+    padding: 2rem 0;
+    scroll-margin-top: 0.5rem;
+  }
+  #contact{ min-height: 40vh; }
+  h2.sec-title{
+    font-family: var(--display);
+    font-weight: 700;
+    font-size: clamp(2.2rem, 5vw, 3.4rem);
+    line-height: 1.05;
+    margin: 0 0 1.25rem;
+  }
+  h2.sec-title::after{
+    content: "";
+    display: block;
+    width: 56px;
+    height: 5px;
+    border-radius: 999px;
+    background: var(--grad);
+    margin-top: 0.7rem;
+  }
+  h3.sub{
+    font-family: var(--display);
+    font-weight: 600;
+    font-size: 1.05rem;
+    color: var(--muted);
+    margin: 0 0 0.9rem;
+  }
+  .sweep{
+    background-image: var(--grad);
+    background-repeat: no-repeat;
+    background-position: 0 96%;
+    background-size: 0% 3px;
+    transition: background-size 0.3s ease;
+    box-decoration-break: clone;
+    -webkit-box-decoration-break: clone;
+  }
+
+  /* About */
+  .about-grid{
+    display: grid;
+    grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr);
+    gap: 3rem;
+    align-items: start;
+  }
+  .about-grid p{ margin: 0 0 1.5rem; color: var(--muted); }
+  .about-grid p:first-child{ color: var(--ink); }
+  .modules{
+    list-style: none;
+    margin: 0 0 1.5rem;
+    padding: 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.6rem;
+    font-family: var(--display);
+    font-weight: 600;
+    font-size: 1.02rem;
+  }
+  .modules li{
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    background: var(--surface);
+    border: 1px solid var(--line);
+    padding: 0.5rem 1rem;
+    border-radius: 999px;
+  }
+  .modules li::before{
+    content: "";
+    width: 0.6rem; height: 0.6rem;
+    border-radius: 50%;
+    background: var(--grad);
+    flex: none;
+  }
+  .facts{ margin: 0; position: sticky; top: 2rem; display: grid; gap: 0.8rem; }
+  .facts div{
+    padding: 1.15rem 1.25rem;
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: var(--r-lg);
+  }
+  .facts dt{ font-family: var(--display); font-weight: 700; font-size: 1.1rem; line-height: 1.3; }
+  .facts dd{ margin: 0.3rem 0 0; color: var(--muted); font-size: 0.95rem; }
+
+  @media (max-width: 760px){
+    .about-grid{ grid-template-columns: 1fr; gap: 1rem; }
+    .facts{ position: static; }
+  }
+
+  /* Skills */
+  .skillset{ margin-bottom: 1.5rem; }
+  .chips{ list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 0.5rem; }
+  .chip{
+    font-family: var(--display);
+    font-weight: 500;
+    font-size: 0.97rem;
+    background: var(--surface);
+    border: 1px solid var(--line);
+    color: var(--ink);
+    padding: 0.45rem 0.9rem;
+    border-radius: 10px;
+    transition: border-color 0.2s ease, transform 0.15s ease;
+  }
+  .chip:hover{ border-color: var(--pop); transform: translateY(-2px); }
+  .chip a{ color: inherit; text-decoration: underline dotted; text-underline-offset: 0.2em; }
+  .chip a:hover{ color: inherit; }
+
+  /* Terminal window, like the classic macOS Terminal */
+  .term{
+    max-width: 640px;
+    border-radius: 12px;
+    overflow: hidden;
+    background: #1B1E23;
+    box-shadow: 0 0 0 1px rgba(0,0,0,0.35), 0 26px 50px -26px rgba(14,22,32,0.6);
+    font-family: Menlo, SFMono-Regular, ui-monospace, 'JetBrains Mono', Consolas, 'Liberation Mono', monospace;
+  }
+  .term-bar{
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 13px;
+    background: linear-gradient(#EBEAEC, #D5D3D6);
+    border-bottom: 1px solid #B4B2B6;
+  }
+  [data-theme="dark"] .term-bar{ background: linear-gradient(#3C3F44, #2E3136); border-bottom-color: #17191D; }
+  .dot{ width: 12px; height: 12px; border-radius: 50%; box-shadow: inset 0 0 0 1px rgba(0,0,0,0.15); flex: none; }
+  .dot.r{ background: #FF5F57; }
+  .dot.y{ background: #FEBC2E; }
+  .dot.g{ background: #28C840; }
+  .term-title{
+    position: absolute;
+    left: 0; right: 0;
+    text-align: center;
+    font-size: 0.78rem;
+    color: #4A4A4F;
+    pointer-events: none;
+  }
+  [data-theme="dark"] .term-title{ color: #AEB0B6; }
+  .term-body{ padding: 14px 16px 16px; color: #E6E8EB; font-size: 0.95rem; line-height: 1.7; }
+  .term .prompt{ color: #7EE2C5; }
+  .term-out{ display: flex; flex-direction: column; align-items: flex-start; margin-bottom: 0.2rem; }
+  .term .ls{ color: #8CC8FF; font-weight: 600; padding: 0 0.15em; border-radius: 3px; cursor: default; white-space: nowrap; text-decoration: none; }
+  .term a.ls{ cursor: pointer; }
+  .term .ls:hover{ background: rgba(255,255,255,0.2); color: #fff; }
+  .term .cursor{
+    display: inline-block;
+    width: 0.6em;
+    height: 1.15em;
+    background: #E6E8EB;
+    vertical-align: text-bottom;
+    animation: blink 1.1s steps(1) infinite;
+  }
+  @keyframes blink{ 50%{ opacity: 0; } }
+
+  /* Projects */
+  .intro{ max-width: 38rem; color: var(--muted); margin: 0 0 1.75rem; }
+  .filters{ display: flex; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 0.5rem; }
+  .filters button{
+    font-family: var(--display);
+    font-weight: 500;
+    font-size: 0.95rem;
+    padding: 0.45rem 1rem;
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    background: var(--surface);
+    color: var(--ink);
+    cursor: pointer;
+    transition: border-color 0.2s ease;
+  }
+  .filters button:hover{ border-color: var(--pop); }
+  .filters button[aria-pressed="true"]{ background: var(--grad); color: var(--on-grad); border-color: transparent; font-weight: 600; }
+  .count{ font-family: var(--display); font-size: 0.9rem; color: var(--muted); margin: 0.6rem 0 1.4rem; min-height: 1.4em; }
+
+  .entries{
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 290px), 1fr));
+    gap: 1rem;
+  }
+  .entry a{
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+    height: 100%;
+    padding: 1.4rem;
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: var(--r-lg);
+    color: var(--ink);
+    text-decoration: none;
+    transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+  }
+  .entry a::before{
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(240px circle at var(--mx, 50%) var(--my, 0%), rgba(91,184,255,0.18), transparent 70%);
+    opacity: 0;
+    transition: opacity 0.25s ease;
+    pointer-events: none;
+  }
+  .entry a:hover, .entry a:focus-visible{
+    transform: translateY(-4px);
+    border-color: var(--pop);
+    box-shadow: var(--glow);
+  }
+  .entry a:hover::before{ opacity: 1; }
+  .entry h3{
+    margin: 0;
+    font-family: var(--display);
+    font-weight: 700;
+    font-size: 1.4rem;
+    line-height: 1.2;
+  }
+  .entry h3 span{ display: inline; }
+  .entry p{ margin: 0; color: var(--muted); font-size: 0.95rem; line-height: 1.65; flex: 1; }
+  .entry .tags{ display: flex; flex-wrap: wrap; gap: 0.4rem; margin-top: 0.4rem; }
+  .entry .tags span{
+    font-family: var(--display);
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--brand-ink);
+    background: var(--surface-2);
+    padding: 0.2rem 0.65rem;
+    border-radius: 999px;
+  }
+  .entry a:hover h3 span, .entry a:focus-visible h3 span{ background-size: 100% 3px; }
+  .entry.flash a{ animation: flash 1.8s ease forwards; }
+  @keyframes flash{
+    0%, 60%{ box-shadow: 0 0 0 4px var(--pop), var(--glow); }
+    100%{ box-shadow: 0 0 0 0 transparent; }
+  }
+
+  .qr-card{
+    display: inline-flex;
+    align-items: center;
+    gap: 0.9rem;
+    padding: 0.6rem 1rem 0.6rem 0.6rem;
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 18px;
+    color: var(--ink);
+    text-decoration: none;
+    font-family: var(--display);
+    font-weight: 500;
+    font-size: 0.95rem;
+    line-height: 1.3;
+    transition: border-color 0.2s ease;
+  }
+  .qr-card img{ background: #fff; padding: 5px; border-radius: 12px; display: block; }
+  .qr-card:hover{ border-color: var(--pop); color: var(--ink); }
+  .repo-link{ margin-top: 2rem; display: flex; gap: 1rem; flex-wrap: wrap; align-items: center; }
+
+  /* STRIDE explorer */
+  .stride{ margin-bottom: 2.5rem; }
+  .stride h3, .attack h3{
+    font-family: var(--display);
+    font-weight: 700;
+    font-size: 1.7rem;
+    margin: 0 0 0.6rem;
+  }
+  .stride-keys{ display: flex; gap: 0.6rem; flex-wrap: wrap; margin: 1.5rem 0; }
+  .stride-keys button{
+    font-family: var(--display);
+    font-weight: 800;
+    font-size: 2.4rem;
+    line-height: 1;
+    width: 4.3rem;
+    height: 4.3rem;
+    border: 1px solid var(--line);
+    background: var(--surface);
+    color: var(--ink);
+    cursor: pointer;
+    border-radius: 18px;
+    transition: transform 0.15s ease, border-color 0.2s ease;
+  }
+  .stride-keys button:hover{ transform: translateY(-3px); border-color: var(--pop); }
+  .stride-keys button[aria-pressed="true"]{ background: var(--grad); color: var(--on-grad); border-color: transparent; box-shadow: var(--glow); }
+  .stride-out{ min-height: 9rem; max-width: 38rem; }
+  .stride-out h4{ font-family: var(--display); font-weight: 700; font-size: 1.4rem; margin: 0 0 0.3rem; }
+  .stride-out p{ margin: 0 0 1rem; color: var(--muted); }
+  .stride-projects{ list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 0.5rem; }
+  .stride-projects button{
+    font-family: var(--display);
+    font-weight: 600;
+    font-size: 0.98rem;
+    border: 1px solid var(--line);
+    background: var(--surface);
+    color: var(--ink);
+    padding: 0.4rem 0.95rem;
+    border-radius: 999px;
+    cursor: pointer;
+  }
+  .stride-projects button:hover{ background: var(--grad); color: var(--on-grad); border-color: transparent; }
+
+  /* ATT&CK stages */
+  .attack{ padding-top: 1rem; }
+  .tactics{ list-style: none; margin: 1.25rem 0 0; padding: 0; display: flex; flex-wrap: wrap; gap: 0.5rem; }
+  .tactics a{
+    font-family: var(--display);
+    font-weight: 600;
+    font-size: 0.97rem;
+    display: flex;
+    gap: 0.5rem;
+    align-items: baseline;
+    border: 1px solid var(--line);
+    background: var(--surface);
+    color: var(--ink);
+    padding: 0.45rem 0.9rem;
+    border-radius: 999px;
+    text-decoration: none;
+    transition: border-color 0.2s ease;
+  }
+  .tactics a .n{ font-weight: 500; font-size: 0.8rem; color: var(--muted); }
+  .tactics a:hover{ border-color: var(--pop); color: var(--ink); }
+
+  /* Research */
+  .paper{
+    padding: 1.9rem;
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 26px;
+    max-width: 46rem;
+    box-shadow: var(--glow);
+  }
+  .paper-tag{
+    display: inline-block;
+    font-family: var(--display);
+    font-weight: 700;
+    font-size: 0.85rem;
+    background: var(--grad);
+    color: var(--on-grad);
+    padding: 0.2rem 0.75rem;
+    border-radius: 999px;
+    margin-bottom: 0.9rem;
+  }
+  .paper h3{
+    font-family: var(--display);
+    font-weight: 600;
+    font-size: clamp(1.3rem, 2.6vw, 1.75rem);
+    line-height: 1.3;
+    margin: 0 0 0.9rem;
+  }
+  .paper p{ margin: 0; font-size: 0.98rem; color: var(--muted); }
+  .note{ color: var(--muted); margin: 2.25rem 0 0; }
+
+  /* Interests */
+  .interests{
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 0.9rem;
+  }
+  .interests li{
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: var(--r-lg);
+    padding: 1.1rem 1.25rem;
+    font-family: var(--display);
+    font-weight: 600;
+    font-size: 1.05rem;
+    line-height: 1.4;
+    transition: transform 0.15s ease, border-color 0.2s ease;
+  }
+  .interests li:hover{ transform: translateY(-3px); border-color: var(--pop); }
+
+  /* Contact */
+  .contact-row{ display: flex; gap: 1rem; flex-wrap: wrap; align-items: center; }
+  .social-icon{
+    display: inline-flex; align-items: center; justify-content: center;
+    width: 50px; height: 50px;
+    background: var(--surface);
+    border: 1px solid var(--line);
+    color: var(--ink);
+    border-radius: 14px;
+    transition: transform 0.15s ease, border-color 0.2s ease;
+  }
+  .social-icon svg{ width: 22px; height: 22px; fill: currentColor; }
+  .social-icon:hover{ transform: translateY(-2px); border-color: var(--pop); color: var(--ink); }
+  .contact-form{ display: flex; flex-direction: column; gap: 1.2rem; max-width: 30rem; margin-top: 2rem; }
+  .form-row{ display: flex; flex-direction: column; gap: 0.35rem; }
+  .form-row label{ font-family: var(--display); font-weight: 600; font-size: 0.95rem; }
+  .form-row input, .form-row textarea{
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    color: var(--ink);
+    font-family: var(--sans);
+    font-size: 1rem;
+    padding: 0.75rem 0.9rem;
+    resize: vertical;
+  }
+  .form-row input:focus, .form-row textarea:focus{ outline: none; border-color: var(--pop); box-shadow: 0 0 0 3px rgba(79,227,193,0.25); }
+  .form-row input[aria-invalid="true"], .form-row textarea[aria-invalid="true"]{ border-color: #FF6B7A; }
+  .form-error{ display: block; font-family: var(--display); font-size: 0.88rem; color: #FF6B7A; }
+  [data-theme="light"] .form-error{ color: #C62839; }
+  .form-notice{ font-family: var(--display); font-weight: 500; }
+  .form-notice:empty{ display: none; }
+  .contact-form button{ align-self: flex-start; }
+
+  footer{
+    padding: 2rem 1rem 2.5rem;
+    text-align: center;
+    color: var(--muted);
+    font-family: var(--mono);
+    font-size: 0.78rem;
+    letter-spacing: normal;
+    word-spacing: normal;
+  }
+  .footer-tab{ max-width: 340px; margin: 0 auto; }
+
+  /* Footer marquee: m1 slides across first, then m2, on one lane, as in the original.
+     It only shows in dark mode, because the logos were made for dark backgrounds. */
+  .marquee{
+    position: relative;
+    overflow: hidden;
+    width: 100%;
+    max-width: 280px;
+    height: 80px;
+    margin: 1.25rem auto 0;
+    -webkit-mask-image: linear-gradient(90deg, transparent, #000 10%, #000 90%, transparent);
+    mask-image: linear-gradient(90deg, transparent, #000 10%, #000 90%, transparent);
+  }
+  .marquee img{
+    position: absolute;
+    top: 50%;
+    width: auto;
+    transform: translateY(-50%);
+    opacity: 0.9;
+  }
+  .mq-a{ height: 62px; animation: seq-a 15s linear infinite; }
+  .mq-b{ height: 132px; animation: seq-b 15s linear infinite; }
+  [data-theme="light"] .marquee{ display: none; }
+  @keyframes seq-a{
+    0%   { left: 100%; }
+    60%  { left: -240px; }
+    100% { left: -240px; }
+  }
+  @keyframes seq-b{
+    0%   { left: 100%; }
+    60%  { left: 100%; }
+    100% { left: -140px; }
+  }
+  @media (prefers-reduced-motion: reduce){
+    .marquee img{ animation: none; }
+    .mq-a{ left: 50%; transform: translate(-50%, -50%); }
+    .mq-b{ display: none; }
+  }
+
+  /* Command palette */
+  .pal{
+    position: fixed; inset: 0;
+    display: none;
+    align-items: flex-start;
+    justify-content: center;
+    padding-top: 14vh;
+    background: rgba(5,9,14,0.65);
+    backdrop-filter: blur(6px);
+    z-index: 60;
+  }
+  .pal.open{ display: flex; }
+  .pal-box{
+    width: min(560px, 92vw);
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 22px;
+    box-shadow: var(--glow);
+    overflow: hidden;
+  }
+  .pal-box input{
+    width: 100%;
+    background: transparent;
+    border: 0;
+    border-bottom: 1px solid var(--line);
+    padding: 1.1rem 1.25rem;
+    font-family: var(--display);
+    font-size: 1.15rem;
+    color: var(--ink);
+  }
+  .pal-box input:focus{ outline: none; }
+  .pal-list{ list-style: none; margin: 0; padding: 0.5rem; max-height: 50vh; overflow-y: auto; }
+  .pal-list li{
+    padding: 0.65rem 0.85rem;
+    border-radius: 12px;
+    font-family: var(--display);
+    font-weight: 500;
+    font-size: 1.02rem;
+    cursor: pointer;
+  }
+  .pal-list li[aria-selected="true"]{ background: var(--grad); color: var(--on-grad); font-weight: 600; }
+  .pal-empty{ padding: 1rem 1.25rem; font-family: var(--display); color: var(--muted); }
+  .pal-hint{
+    padding: 0.6rem 1.25rem;
+    border-top: 1px solid var(--line);
+    font-family: var(--display);
+    font-size: 0.82rem;
+    color: var(--muted);
+  }
+
+
+  /* Type: Inter everywhere. Its optical size axis switches to the tighter display design on big text. */
+  body{ letter-spacing: 0; word-spacing: var(--ws-body); font-optical-sizing: auto; }
+  button, input, textarea{ letter-spacing: inherit; word-spacing: inherit; }
+  .rail-nav a, .btn, .tool, .filters button, .tactics a, .interests li, .modules li, .facts dt,
+  .stride-projects button, .paper-tag, .entry .tags span, .qr-card, .pal-list li, .pal-box input,
+  .roles, .chip, .form-row label, h3.sub, .count{ word-spacing: var(--ws-ui); }
+  h1.name, h2, h3, h4{ letter-spacing: 0; word-spacing: var(--ws-head); }
+  h3.sub{ word-spacing: var(--ws-ui); }
+  h1.name{ letter-spacing: -0.02em; }
+</style>
+</head>
+<body>
+
+<a class="skip-link" href="#main">Skip to content</a>
+
+<div class="shell">
+
+  <aside class="rail">
+    <a class="rail-mark" href="#top" aria-label="Brian Mack, back to top">BM</a>
+
+    <nav class="rail-nav" aria-label="Sections">
+      <ul>
+        <li><a href="#about">About</a></li>
+        <li><a href="#skills">Skills</a></li>
+        <li><a href="#projects">Projects</a></li>
+        <li><a href="#threat-models">Threat models</a></li>
+        <li><a href="#research">Research</a></li>
+        <li><a href="#interests">Interests</a></li>
+        <li><a href="#contact">Contact</a></li>
+      </ul>
+    </nav>
+
+    <div class="rail-tools">
+      <button type="button" class="tool" id="palOpen" aria-haspopup="dialog">Jump to <kbd>Ctrl + K</kbd></button>
+      <button type="button" class="tool" id="themeToggle">Dark mode</button>
+    </div>
+  </aside>
+
+  <div class="main" id="main">
+
+    <section class="hero" id="top">
+      <div class="hero-top">
+        <h1 class="name" id="name" aria-label="Brian Mack"><span class="word">Brian</span><span class="word">Mack</span></h1>
+
+        <figure class="portrait" id="photoFrame">
+          <div class="tile">
+            <!-- To show your own photo: add "photo.jpg" inside an "assets" folder next to this index.html.
+                 If it is missing, a fallback initial is shown instead. -->
+            <img id="profilePhoto" src="assets/photo.jpg" alt="Portrait of Brian Mack">
+            <div class="photo-fallback" aria-hidden="true">B</div>
+          </div>
+        </figure>
+      </div>
+
+      <ul class="roles" aria-label="Roles">
+        <li><span class="tick" aria-hidden="true">&#10003;</span><button type="button" class="redact" aria-pressed="false">Security engineer</button></li>
+        <li><span class="tick" aria-hidden="true">&#10003;</span><button type="button" class="redact" aria-pressed="false">DevSecOps engineer</button></li>
+        <li><span class="tick" aria-hidden="true">&#10003;</span><button type="button" class="redact" aria-pressed="false">Product security engineer</button></li>
+      </ul>
+      <p class="redact-hint">Hover or tap a bar to reveal it. <button type="button" class="link-btn" id="redactAll">Reveal all</button></p>
+
+      <p class="summary">I am a security engineer specialising in DevSecOps and product security. My work covers software supply chain security, vulnerability scanning, assessment and management, and application security. I am currently studying for a Master's degree in Advanced Computer Science (Cybersecurity) and am particularly interested in the use of AI for access management.</p>
+
+    </section>
+
+    <section class="block" id="about">
+      <h2 class="sec-title">Background</h2>
+      <div class="about-grid">
+        <div>
+          <p>My professional journey has taken me through several distinct fields before leading me to Cybersecurity. Starting out in customer relationship management systems, I then moved into telecommunications before eventually finding my footing in Cybersecurity. This unusual route has given me a well rounded, almost restless curiosity about how organisations actually function beneath their processes and policies. That curiosity turned into a specialism: software supply chain security, vulnerability assessment and management and application security. These are the quieter disciplines that keep systems trustworthy long after they have been shipped. I am now building on this foundation by studying for an MSc Advanced Computer Science with a focus on Cybersecurity at the University of Hertfordshire. So far, I have excelled in the following modules:</p>
+          <ul class="modules">
+            <li>Advanced Algorithms and Paradigms</li>
+            <li>Distributed Systems Security</li>
+            <li>Digital Forensics</li>
+            <li>Penetration Testing</li>
+          </ul>
+          <p>My focus area lies at the edge of that discipline, in how AI algorithms and access management might be brought closer together to build systems that respond more intelligently to context.</p>
+        </div>
+
+        <div>
+          <h3 class="sub">Education</h3>
+          <dl class="facts">
+            <div>
+              <dt>MSc Advanced Computer Science</dt>
+              <dd>University of Hertfordshire, in progress since January 2026</dd>
+            </div>
+            <div>
+              <dt>BSc (Hons) Mathematics and Computer Science</dt>
+              <dd>Jomo Kenyatta University of Agriculture and Technology</dd>
+            </div>
+          </dl>
+        </div>
+      </div>
+    </section>
+
+    <section class="block" id="skills">
+      <h2 class="sec-title">Technical skills</h2>
+
+      <div class="skillset">
+        <h3 class="sub">Programming and security</h3>
+        <div class="term" id="term">
+          <div class="term-bar">
+            <span class="dot r"></span><span class="dot y"></span><span class="dot g"></span>
+            <span class="term-title">mack@mac: ~ (zsh)</span>
+          </div>
+          <div class="term-body">
+            <div class="term-line"><span class="prompt">mack@mac ~ %</span> <span class="cmd" data-text="ls -1 programming/">ls -1 programming/</span></div>
+            <div class="term-out"><span class="ls">Python</span><span class="ls">C++</span><span class="ls">JavaScript</span><span class="ls">Bash</span></div>
+            <div class="term-line"><span class="prompt">mack@mac ~ %</span> <span class="cmd" data-text="ls -1 security/">ls -1 security/</span></div>
+            <div class="term-out"><a class="ls" href="#stride">STRIDE</a><a class="ls" href="#attack">MITRE ATT&amp;CK</a><span class="ls">Zero Trust</span><span class="ls">Vulnerability Scanning, Assessment and Management</span><span class="ls">Penetration Testing</span><span class="ls">PKI</span><span class="ls">Applied Cryptography</span><span class="ls">Malware Analysis</span><span class="ls">Applied AI</span></div>
+            <div class="term-line term-last"><span class="prompt">mack@mac ~ %</span> <span class="cursor"></span></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="block" id="projects">
+      <h2 class="sec-title">Open source</h2>
+      <p class="intro">In my leisure time, I maintain a handful of security and system tools. Filter them by the kind of problem they tackle.</p>
+
+      <div class="filters" role="group" aria-label="Filter projects">
+        <button type="button" data-filter="all" aria-pressed="true">All</button>
+        <button type="button" data-filter="supply" aria-pressed="false">Supply chain</button>
+        <button type="button" data-filter="appsec" aria-pressed="false">Application security</button>
+        <button type="button" data-filter="privacy" aria-pressed="false">Privacy</button>
+        <button type="button" data-filter="systems" aria-pressed="false">Systems</button>
+      </div>
+      <p class="count" id="count" aria-live="polite"></p>
+
+      <ul class="entries" id="entries">
+        <li class="entry" id="p-mime-filter" data-tags="appsec privacy">
+          <a href="https://github.com/macbuildssys/mime-filter" target="_blank" rel="noopener">
+            <h3><span class="sweep">mime-filter</span></h3>
+            <p>Brings the MIME type and content signature verification used in email servers, secure web gateways and firewalls to the browser itself, applying that same layer of defence to everyday downloads.</p>
+            <span class="tags">Application security, Privacy</span>
+          </a>
+        </li>
+        <li class="entry" id="p-LocalChat" data-tags="privacy">
+          <a href="https://github.com/macbuildssys/LocalChat" target="_blank" rel="noopener">
+            <h3><span class="sweep">LocalChat</span></h3>
+            <p>A chat interface for language models that run on your own computer through Ollama. Your conversations never leave your machine, there is no account to create and no per message bill. It puts secure local AI inference into practice for anyone who wants to use AI on private material.</p>
+            <span class="tags">Privacy</span>
+          </a>
+        </li>
+        <li class="entry" id="p-ConsentGuard" data-tags="privacy">
+          <a href="https://github.com/macbuildssys/ConsentGuard" target="_blank" rel="noopener">
+            <h3><span class="sweep">ConsentGuard</span></h3>
+            <p>An Android app that refuses cookie and consent pop ups for you, in your browser and inside other apps. Instead of tapping a single "Reject All" button, it switches off every individual consent toggle, because some sites only let you object that way. It is built on Android's AccessibilityService, so it is not tied to any one browser.</p>
+            <span class="tags">Privacy</span>
+          </a>
+        </li>
+        <li class="entry" id="p-vulnscope" data-tags="supply">
+          <a href="https://github.com/macbuildssys/vulnscope" target="_blank" rel="noopener">
+            <h3><span class="sweep">vulnscope</span></h3>
+            <p>An ML pipeline analysing NVD supply chain CVE trends from 2015 to 2026, using linear regression, logistic regression and random forest models to forecast emerging weakness categories.</p>
+            <span class="tags">Supply chain</span>
+          </a>
+        </li>
+        <li class="entry" id="p-dockerfile-hardener" data-tags="supply appsec">
+          <a href="https://github.com/macbuildssys/dockerfile-hardener" target="_blank" rel="noopener">
+            <h3><span class="sweep">dockerfile-hardener</span></h3>
+            <p>A CLI tool that analyses Dockerfiles for security misconfigurations, applies auto fixes where possible, and produces reports in table, JSON, SARIF and HTML formats, covering ten hardening rules.</p>
+            <span class="tags">Supply chain, Application security</span>
+          </a>
+        </li>
+        <li class="entry" id="p-secret-scanner" data-tags="supply appsec">
+          <a href="https://github.com/macbuildssys/secret-scanner" target="_blank" rel="noopener">
+            <h3><span class="sweep">secret-scanner</span></h3>
+            <p>Combines regex pattern matching with Shannon entropy scoring to detect hardcoded credentials while suppressing false positives, outputting SARIF 2.1.0 for GitHub's Security tab.</p>
+            <span class="tags">Supply chain, Application security</span>
+          </a>
+        </li>
+        <li class="entry" id="p-spectre-meltdown" data-tags="systems">
+          <a href="https://github.com/macbuildssys/spectre-meltdown" target="_blank" rel="noopener">
+            <h3><span class="sweep">spectre-meltdown</span></h3>
+            <p>Parses spectre-meltdown-checker output into a structured HTML report, mapping CPU level exposure to kernel mitigation status across Spectre, Meltdown, MDS and related microarchitectural side channel issues.</p>
+            <span class="tags">Systems</span>
+          </a>
+        </li>
+        <li class="entry" id="p-api-sec-scanner" data-tags="appsec">
+          <a href="https://github.com/macbuildssys/api-sec-scanner" target="_blank" rel="noopener">
+            <h3><span class="sweep">api-sec-scanner</span></h3>
+            <p>A proof of concept vulnerability scanner for HTTPS and REST APIs, built to showcase automated detection techniques and serve as a foundation for further research.</p>
+            <span class="tags">Application security</span>
+          </a>
+        </li>
+        <li class="entry" id="p-mac-shell" data-tags="systems">
+          <a href="https://github.com/macbuildssys/mac-shell" target="_blank" rel="noopener">
+            <h3><span class="sweep">mac-shell</span></h3>
+            <p>A Unix shell built from scratch in Rust, written to understand how shells actually work under the hood.</p>
+            <span class="tags">Systems</span>
+          </a>
+        </li>
+      </ul>
+
+      <div class="repo-link">
+        <a class="btn btn-primary" href="https://github.com/macbuildssys?tab=repositories" target="_blank" rel="noopener">See all repositories on GitHub</a>
+        <a class="qr-card" href="https://chromewebstore.google.com/detail/mime-filter/bhiclkpfmnjdemhamopgimkohlppbojb" target="_blank" rel="noopener" aria-label="Open MIME Filter on the Chrome Web Store">
+          <img src="assets/mime-filter-qr.png" alt="QR code linking to MIME Filter on the Chrome Web Store" width="88" height="88">
+          <span>MIME Filter<br>Chrome Web Store</span>
+        </a>
+      </div>
+    </section>
+
+    <section class="block" id="threat-models">
+      <h2 class="sec-title">Thinking like an attacker</h2>
+      <p class="intro">Two frameworks that guide how I look at a system. STRIDE asks what could go wrong with a design. MITRE ATT&amp;CK shows how a real attacker moves, one step at a time.</p>
+
+      <div class="stride" id="stride">
+        <h3>Where my projects sit in STRIDE</h3>
+        <p class="intro" style="margin-bottom:0">STRIDE is a checklist for asking what could go wrong with a system. Pick a letter to see which of my projects works on that kind of problem.</p>
+        <div class="stride-keys" role="group" aria-label="STRIDE categories">
+          <button type="button" data-key="S" aria-pressed="true" aria-label="Spoofing">S</button>
+          <button type="button" data-key="T" aria-pressed="false" aria-label="Tampering">T</button>
+          <button type="button" data-key="R" aria-pressed="false" aria-label="Repudiation">R</button>
+          <button type="button" data-key="I" aria-pressed="false" aria-label="Information disclosure">I</button>
+          <button type="button" data-key="D" aria-pressed="false" aria-label="Denial of service">D</button>
+          <button type="button" data-key="E" aria-pressed="false" aria-label="Elevation of privilege">E</button>
+        </div>
+        <div class="stride-out" id="strideOut" aria-live="polite"></div>
+      </div>
+
+      <div class="attack" id="attack">
+        <h3>MITRE ATT&amp;CK</h3>
+        <p class="intro" style="margin-bottom:0">A public catalogue of how real attackers operate, sorted into 14 stages called tactics. Each one links to the official page.</p>
+        <ol class="tactics" aria-label="The 14 ATT&amp;CK tactics in order">
+          <li><a href="https://attack.mitre.org/tactics/TA0043/" target="_blank" rel="noopener"><span class="n">1</span>Reconnaissance</a></li>
+          <li><a href="https://attack.mitre.org/tactics/TA0042/" target="_blank" rel="noopener"><span class="n">2</span>Resource Development</a></li>
+          <li><a href="https://attack.mitre.org/tactics/TA0001/" target="_blank" rel="noopener"><span class="n">3</span>Initial Access</a></li>
+          <li><a href="https://attack.mitre.org/tactics/TA0002/" target="_blank" rel="noopener"><span class="n">4</span>Execution</a></li>
+          <li><a href="https://attack.mitre.org/tactics/TA0003/" target="_blank" rel="noopener"><span class="n">5</span>Persistence</a></li>
+          <li><a href="https://attack.mitre.org/tactics/TA0004/" target="_blank" rel="noopener"><span class="n">6</span>Privilege Escalation</a></li>
+          <li><a href="https://attack.mitre.org/tactics/TA0005/" target="_blank" rel="noopener"><span class="n">7</span>Defense Evasion</a></li>
+          <li><a href="https://attack.mitre.org/tactics/TA0006/" target="_blank" rel="noopener"><span class="n">8</span>Credential Access</a></li>
+          <li><a href="https://attack.mitre.org/tactics/TA0007/" target="_blank" rel="noopener"><span class="n">9</span>Discovery</a></li>
+          <li><a href="https://attack.mitre.org/tactics/TA0008/" target="_blank" rel="noopener"><span class="n">10</span>Lateral Movement</a></li>
+          <li><a href="https://attack.mitre.org/tactics/TA0009/" target="_blank" rel="noopener"><span class="n">11</span>Collection</a></li>
+          <li><a href="https://attack.mitre.org/tactics/TA0011/" target="_blank" rel="noopener"><span class="n">12</span>Command and Control</a></li>
+          <li><a href="https://attack.mitre.org/tactics/TA0010/" target="_blank" rel="noopener"><span class="n">13</span>Exfiltration</a></li>
+          <li><a href="https://attack.mitre.org/tactics/TA0040/" target="_blank" rel="noopener"><span class="n">14</span>Impact</a></li>
+        </ol>
+      </div>
+    </section>
+
+    <section class="block" id="research">
+      <h2 class="sec-title">Research</h2>
+
+      <div class="paper">
+        <span class="paper-tag">Pre-print, pending review</span>
+        <h3>Purity as a Parallelisation Contract: Formal Composability Guarantees and Empirical Throughput in Python and Rust Data Pipelines</h3>
+        <p><a href="https://doi.org/10.5281/zenodo.21420325" target="_blank" rel="noopener">DOI: 10.5281/zenodo.21420325</a>. Also posted to SSRN and ResearchGate.</p>
+      </div>
+
+      <p class="note">I also write about recent advancements in technology on <a href="https://medium.com/@brianmack_42366" target="_blank" rel="noopener">Medium</a>.</p>
+    </section>
+
+    <section class="block" id="interests">
+      <h2 class="sec-title">Interests</h2>
+      <ul class="interests">
+        <li>Threat modelling and architectural defence</li>
+        <li>Secure local AI inference</li>
+        <li>Software supply chain and program analysis</li>
+        <li>End to end encryption</li>
+        <li>Algorithms</li>
+        <li>Distributed systems</li>
+      </ul>
+    </section>
+
+    <section class="block" id="contact">
+      <h2 class="sec-title">Get in touch</h2>
+      <div class="contact-row">
+        <button type="button" id="emailMeToggle" class="btn btn-primary" aria-expanded="false" aria-controls="contactFormWrapper">Email me</button>
+        <a class="social-icon" href="https://www.linkedin.com/in/brian-mack-dev-25-mc" target="_blank" rel="noopener" aria-label="LinkedIn profile">
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <rect x="2" y="8.5" width="4" height="13" rx="0.6"/>
+            <circle cx="4" cy="4" r="2.3"/>
+            <path d="M9 8.5h4v2.2c0.9-1.6 2.6-2.6 4.5-2.6 3.6 0 5.5 2.3 5.5 6.4V21.5h-4v-6.4c0-2-0.8-3.2-2.4-3.2-1.5 0-2.6 1.1-2.6 3.2V21.5h-4z"/>
+          </svg>
+        </a>
+      </div>
+
+      <!-- This form uses Formspree's AJAX library (loaded below) so submissions happen without leaving the page -->
+      <div id="contactFormWrapper" hidden>
+        <form id="contactForm" class="contact-form" action="https://formspree.io/f/mnpqnzen" method="POST">
+          <div data-fs-success class="form-notice"></div>
+          <div data-fs-error class="form-notice form-error"></div>
+
+          <div class="form-row">
+            <label for="cf-name">Name</label>
+            <input type="text" id="cf-name" name="name" data-fs-field required>
+          </div>
+          <div class="form-row">
+            <label for="cf-email">Your email</label>
+            <input type="email" id="cf-email" name="email" data-fs-field required>
+            <span data-fs-error="email" class="form-error"></span>
+          </div>
+          <div class="form-row">
+            <label for="cf-message">Message</label>
+            <textarea id="cf-message" name="message" rows="5" data-fs-field required></textarea>
+            <span data-fs-error="message" class="form-error"></span>
+          </div>
+          <!-- honeypot field: hidden from people, catches simple spam bots -->
+          <input type="text" name="_gotcha" style="display:none" tabindex="-1" autocomplete="off">
+          <button type="submit" data-fs-submit-btn class="btn btn-primary">Send</button>
+        </form>
+      </div>
+
+    </section>
+
+
+  </div>
+</div>
+
+<footer>
+  <div class="footer-tab">
+    <div>© 2026 Brian Mack</div>
+
+    <!-- Decorative sliding logo marks: m1 slides through first, then m2, on a loop -->
+    <div class="marquee" aria-hidden="true">
+      <img class="mq-a" src="assets/m1.png" alt="">
+      <img class="mq-b" src="assets/m2.png" alt="">
+    </div>
+  </div>
+</footer>
+
+<!-- Command palette -->
+<div class="pal" id="pal" role="dialog" aria-modal="true" aria-label="Jump to">
+  <div class="pal-box">
+    <input type="text" id="palInput" placeholder="Type to jump, for example projects" autocomplete="off" role="combobox" aria-expanded="true" aria-controls="palList" aria-autocomplete="list">
+    <ul class="pal-list" id="palList" role="listbox"></ul>
+    <div class="pal-hint">Use the arrow keys to move, Enter to choose, Esc to close.</div>
+  </div>
+</div>
+
+<script>
+(function () {
+  var root = document.documentElement;
+  var reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var finePointer = window.matchMedia('(pointer: fine)').matches;
+
+  /* Photo fallback */
+  var frame = document.getElementById('photoFrame');
+  var img = document.getElementById('profilePhoto');
+  img.addEventListener('error', function () { frame.classList.add('no-photo'); });
+  if (img.complete && img.naturalWidth === 0) frame.classList.add('no-photo');
+
+  /* Theme */
+  var themeBtn = document.getElementById('themeToggle');
+  var metaTheme = document.querySelector('meta[name="theme-color"]');
+  function syncThemeUi() {
+    var dark = root.getAttribute('data-theme') === 'dark';
+    themeBtn.textContent = dark ? 'Light mode' : 'Dark mode';
+    if (metaTheme) metaTheme.setAttribute('content', dark ? '#0E1620' : '#F5F7FF');
+  }
+  function toggleTheme() {
+    var next = root.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+    root.setAttribute('data-theme', next);
+    try { localStorage.setItem('bm-theme', next); } catch (e) {}
+    syncThemeUi();
+  }
+  themeBtn.addEventListener('click', toggleTheme);
+  syncThemeUi();
+
+  /* Redactions */
+  var reds = Array.prototype.slice.call(document.querySelectorAll('.redact'));
+  var redactAllBtn = document.getElementById('redactAll');
+  function setRedact(el, open) {
+    el.classList.toggle('open', open);
+    el.setAttribute('aria-pressed', open ? 'true' : 'false');
+  }
+  function allOpen() { return reds.every(function (r) { return r.classList.contains('open'); }); }
+  function syncRedactBtn() { redactAllBtn.textContent = allOpen() ? 'Redact again' : 'Reveal all'; }
+  var seqTimers = [];
+  function setAll(open, animate) {
+    seqTimers.forEach(clearTimeout);
+    seqTimers = [];
+    reds.forEach(function (r, i) {
+      if (animate && !reduced) {
+        seqTimers.push(setTimeout(function () { setRedact(r, open); syncRedactBtn(); }, i * 170));
+      } else {
+        setRedact(r, open);
+      }
+    });
+    syncRedactBtn();
+  }
+  reds.forEach(function (r) {
+    r.addEventListener('click', function () {
+      setRedact(r, !r.classList.contains('open'));
+      syncRedactBtn();
+    });
+  });
+  redactAllBtn.addEventListener('click', function () { setAll(!allOpen(), true); });
+  syncRedactBtn();
+  if (reduced) { setAll(true, false); }
+  else { setTimeout(function () { setAll(true, true); }, 1100); }
+
+  /* The name gets a little bolder and brighter as the pointer comes close */
+  (function () {
+    var nameEl = document.getElementById('name');
+    if (reduced || !finePointer) return;
+    var queued = false, px = -9999, py = -9999;
+    function paint() {
+      queued = false;
+      var r = nameEl.getBoundingClientRect();
+      var d = Math.hypot(px - (r.left + r.width / 2), py - (r.top + r.height / 2));
+      var t = Math.max(0, 1 - d / 520);
+      nameEl.style.fontVariationSettings = '"wght" ' + Math.round(640 + t * 160);
+      nameEl.style.color = 'color-mix(in srgb, var(--pop) ' + Math.round(t * 55) + '%, var(--ink))';
+    }
+    window.addEventListener('pointermove', function (e) {
+      px = e.clientX; py = e.clientY;
+      if (!queued) { queued = true; requestAnimationFrame(paint); }
+    });
+    document.addEventListener('pointerleave', function () { px = -9999; py = -9999; paint(); });
+  })();
+
+  /* Active section in the rail. Uses scroll position, and treats the bottom of the page as Contact. */
+  (function () {
+    var links = Array.prototype.slice.call(document.querySelectorAll('.rail-nav a'));
+    var items = links.map(function (a) {
+      return { a: a, el: document.getElementById(a.getAttribute('href').slice(1)) };
+    }).filter(function (x) { return x.el; });
+    function setActive(a) {
+      links.forEach(function (l) {
+        if (l === a) l.setAttribute('aria-current', 'true'); else l.removeAttribute('aria-current');
+      });
+    }
+    function spy() {
+      var line = window.innerHeight * 0.35;
+      var current = null;
+      items.forEach(function (x) { if (x.el.getBoundingClientRect().top <= line) current = x; });
+      var atBottom = window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 4;
+      if (atBottom && items.length) current = items[items.length - 1];
+      setActive(current ? current.a : null);
+    }
+    var ticking = false;
+    window.addEventListener('scroll', function () {
+      if (!ticking) { ticking = true; requestAnimationFrame(function () { ticking = false; spy(); }); }
+    }, { passive: true });
+    window.addEventListener('resize', spy);
+    links.forEach(function (a) { a.addEventListener('click', function () { setActive(a); }); });
+    spy();
+  })();
+
+  /* Project filter, tag pills and hover glow */
+  var entries = Array.prototype.slice.call(document.querySelectorAll('.entry'));
+  var filterBtns = Array.prototype.slice.call(document.querySelectorAll('.filters button'));
+  var countEl = document.getElementById('count');
+  var labels = { all: 'all projects', supply: 'supply chain', appsec: 'application security', privacy: 'privacy', systems: 'systems' };
+  entries.forEach(function (li) {
+    var t = li.querySelector('.tags');
+    if (t) t.innerHTML = t.textContent.split(', ').map(function (p) { return '<span>' + p + '</span>'; }).join('');
+  });
+  document.getElementById('entries').addEventListener('pointermove', function (e) {
+    var a = e.target.closest ? e.target.closest('a') : null;
+    if (!a) return;
+    var r = a.getBoundingClientRect();
+    a.style.setProperty('--mx', (e.clientX - r.left) + 'px');
+    a.style.setProperty('--my', (e.clientY - r.top) + 'px');
+  });
+  function applyFilter(f) {
+    var shown = 0;
+    entries.forEach(function (li) {
+      var show = f === 'all' || li.getAttribute('data-tags').split(' ').indexOf(f) !== -1;
+      li.hidden = !show;
+      if (show) shown++;
+    });
+    filterBtns.forEach(function (b) { b.setAttribute('aria-pressed', b.getAttribute('data-filter') === f ? 'true' : 'false'); });
+    countEl.textContent = 'Showing ' + shown + ' of ' + entries.length + ' (' + labels[f] + ')';
+  }
+  filterBtns.forEach(function (b) {
+    b.addEventListener('click', function () { applyFilter(b.getAttribute('data-filter')); });
+  });
+  applyFilter('all');
+
+  function gotoProject(id) {
+    applyFilter('all');
+    var el = document.getElementById(id);
+    if (!el) return;
+    el.scrollIntoView({ behavior: reduced ? 'auto' : 'smooth', block: 'center' });
+    el.classList.remove('flash');
+    void el.offsetWidth;
+    el.classList.add('flash');
+    setTimeout(function () { el.classList.remove('flash'); }, 1900);
+  }
+
+  /* STRIDE explorer */
+  var stride = {
+    S: { name: 'Spoofing', text: 'Someone pretends to be a user, a service or a device that they are not.', p: ['secret-scanner', 'api-sec-scanner'] },
+    T: { name: 'Tampering', text: 'Data or code is changed on its way to you, or after it arrives.', p: ['mime-filter', 'dockerfile-hardener'] },
+    R: { name: 'Repudiation', text: 'Someone does something and later denies it, because nothing recorded it.', p: [] },
+    I: { name: 'Information disclosure', text: 'Private data ends up somewhere it should not be.', p: ['LocalChat', 'ConsentGuard', 'secret-scanner'] },
+    D: { name: 'Denial of service', text: 'A system is made too slow or too busy to be useful.', p: ['api-sec-scanner'] },
+    E: { name: 'Elevation of privilege', text: 'Someone gains more access than they were ever meant to have.', p: ['dockerfile-hardener', 'spectre-meltdown'] }
+  };
+  var strideBtns = Array.prototype.slice.call(document.querySelectorAll('.stride-keys button'));
+  var strideOut = document.getElementById('strideOut');
+  function showStride(k) {
+    var d = stride[k];
+    strideBtns.forEach(function (b) { b.setAttribute('aria-pressed', b.getAttribute('data-key') === k ? 'true' : 'false'); });
+    var html = '<h4>' + d.name + '</h4><p>' + d.text + '</p>';
+    if (d.p.length) {
+      html += '<ul class="stride-projects">' + d.p.map(function (n) {
+        return '<li><button type="button" data-goto="p-' + n + '">' + n + '</button></li>';
+      }).join('') + '</ul>';
+    } else {
+      html += '<p>None of my projects target this one yet.</p>';
+    }
+    strideOut.innerHTML = html;
+  }
+  strideBtns.forEach(function (b) {
+    b.addEventListener('click', function () { showStride(b.getAttribute('data-key')); });
+  });
+  strideOut.addEventListener('click', function (e) {
+    var t = e.target.closest('[data-goto]');
+    if (t) gotoProject(t.getAttribute('data-goto'));
+  });
+  showStride('S');
+
+  /* Terminal: types each command once when the window scrolls into view */
+  (function () {
+    var term = document.getElementById('term');
+    if (!term || reduced || !('IntersectionObserver' in window)) return;
+    var cmds = Array.prototype.slice.call(term.querySelectorAll('.cmd'));
+    var outs = Array.prototype.slice.call(term.querySelectorAll('.term-out'));
+    var last = term.querySelector('.term-last');
+    var steps = cmds.map(function (c, i) {
+      return { line: c.closest('.term-line'), cmd: c, out: outs[i], text: c.getAttribute('data-text') };
+    });
+    steps.forEach(function (st, i) {
+      st.cmd.textContent = '';
+      st.out.style.visibility = 'hidden';
+      if (i > 0) st.line.style.visibility = 'hidden';
+    });
+    last.style.visibility = 'hidden';
+    function run(i) {
+      if (i >= steps.length) { last.style.visibility = 'visible'; return; }
+      var st = steps[i], n = 0;
+      st.line.style.visibility = 'visible';
+      (function tick() {
+        st.cmd.textContent = st.text.slice(0, ++n);
+        if (n < st.text.length) setTimeout(tick, 60);
+        else setTimeout(function () { st.out.style.visibility = 'visible'; setTimeout(function () { run(i + 1); }, 350); }, 220);
+      })();
+    }
+    var io = new IntersectionObserver(function (entries) {
+      if (!entries[0].isIntersecting) return;
+      io.disconnect();
+      run(0);
+    }, { threshold: 0.5 });
+    io.observe(term);
+  })();
+
+  /* Contact form toggle */
+  var toggleBtn = document.getElementById('emailMeToggle');
+  var wrapper = document.getElementById('contactFormWrapper');
+  function openForm() {
+    wrapper.hidden = false;
+    toggleBtn.setAttribute('aria-expanded', 'true');
+    document.getElementById('contact').scrollIntoView({ behavior: reduced ? 'auto' : 'smooth' });
+    var f = document.getElementById('cf-name');
+    if (f) setTimeout(function () { f.focus(); }, reduced ? 0 : 350);
+  }
+  toggleBtn.addEventListener('click', function () {
+    if (wrapper.hidden) { openForm(); }
+    else { wrapper.hidden = true; toggleBtn.setAttribute('aria-expanded', 'false'); }
+  });
+
+  /* Command palette */
+  var pal = document.getElementById('pal');
+  var palInput = document.getElementById('palInput');
+  var palList = document.getElementById('palList');
+  var lastFocus = null;
+  var idx = 0;
+  var shown = [];
+
+  function go(id) {
+    var el = document.getElementById(id);
+    if (el) el.scrollIntoView({ behavior: reduced ? 'auto' : 'smooth' });
+  }
+  function ext(url) { window.open(url, '_blank', 'noopener'); }
+
+  var cmds = [
+    { t: 'Go to Background', k: 'about', run: function () { go('about'); } },
+    { t: 'Go to Skills', k: 'technical', run: function () { go('skills'); } },
+    { t: 'Go to Projects', k: 'open source github', run: function () { go('projects'); } },
+    { t: 'Go to Thinking like an attacker', k: 'threat models stride mitre', run: function () { go('threat-models'); } },
+    { t: 'Go to STRIDE explorer', k: 'threat model', run: function () { go('stride'); } },
+    { t: 'Go to MITRE ATT&CK explainer', k: 'attack tactics techniques burglar mitre', run: function () { go('attack'); } },
+    { t: 'Go to Research', k: 'paper doi', run: function () { go('research'); } },
+    { t: 'Go to Interests', k: '', run: function () { go('interests'); } },
+    { t: 'Go to Contact', k: 'email', run: function () { go('contact'); } },
+    { t: 'Write an email', k: 'contact form message', run: openForm },
+    { t: 'Switch light or dark mode', k: 'theme colours', run: toggleTheme },
+    { t: 'Reveal or redact the role badges', k: 'declassify bars', run: function () { go('top'); setAll(!allOpen(), true); } },
+    { t: 'Open GitHub', k: 'repositories code', run: function () { ext('https://github.com/macbuildssys?tab=repositories'); } },
+    { t: 'Open LinkedIn', k: 'profile', run: function () { ext('https://www.linkedin.com/in/brian-mack-dev-25-mc'); } },
+    { t: 'Open Medium', k: 'blog writing', run: function () { ext('https://medium.com/@brianmack_42366'); } },
+    { t: 'Get MIME Filter for Chrome', k: 'extension store', run: function () { ext('https://chromewebstore.google.com/detail/mime-filter/bhiclkpfmnjdemhamopgimkohlppbojb'); } }
+  ];
+
+  function renderPal() {
+    var q = palInput.value.trim().toLowerCase();
+    shown = cmds.filter(function (c) { return !q || (c.t + ' ' + c.k).toLowerCase().indexOf(q) !== -1; });
+    if (idx >= shown.length) idx = Math.max(0, shown.length - 1);
+    palList.innerHTML = '';
+    if (!shown.length) {
+      var e = document.createElement('li');
+      e.className = 'pal-empty';
+      e.textContent = 'Nothing matches. Try a section name such as projects.';
+      palList.appendChild(e);
+      palInput.removeAttribute('aria-activedescendant');
+      return;
+    }
+    shown.forEach(function (c, i) {
+      var li = document.createElement('li');
+      li.id = 'cmd' + i;
+      li.setAttribute('role', 'option');
+      li.setAttribute('aria-selected', i === idx ? 'true' : 'false');
+      li.textContent = c.t;
+      li.addEventListener('mousemove', function () { if (idx !== i) { idx = i; renderPal(); } });
+      li.addEventListener('click', function () { choose(i); });
+      palList.appendChild(li);
+    });
+    palInput.setAttribute('aria-activedescendant', 'cmd' + idx);
+    var sel = document.getElementById('cmd' + idx);
+    if (sel && sel.scrollIntoView) sel.scrollIntoView({ block: 'nearest' });
+  }
+  function openPal() {
+    lastFocus = document.activeElement;
+    palInput.value = '';
+    idx = 0;
+    pal.classList.add('open');
+    renderPal();
+    palInput.focus();
+  }
+  function closePal() {
+    pal.classList.remove('open');
+    if (lastFocus && lastFocus.focus) lastFocus.focus();
+  }
+  function choose(i) {
+    var c = shown[i];
+    closePal();
+    if (c) setTimeout(c.run, 30);
+  }
+  document.getElementById('palOpen').addEventListener('click', openPal);
+  palInput.addEventListener('input', function () { idx = 0; renderPal(); });
+  pal.addEventListener('mousedown', function (e) { if (e.target === pal) closePal(); });
+
+  document.addEventListener('keydown', function (e) {
+    var typing = /^(INPUT|TEXTAREA)$/.test((document.activeElement || {}).tagName || '');
+    if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'k') {
+      e.preventDefault();
+      if (pal.classList.contains('open')) closePal(); else openPal();
+      return;
+    }
+    if (e.key === '/' && !typing && !pal.classList.contains('open')) {
+      e.preventDefault();
+      openPal();
+      return;
+    }
+    if (!pal.classList.contains('open')) return;
+    if (e.key === 'Escape') { e.preventDefault(); closePal(); }
+    else if (e.key === 'ArrowDown') { e.preventDefault(); if (shown.length) { idx = (idx + 1) % shown.length; renderPal(); } }
+    else if (e.key === 'ArrowUp') { e.preventDefault(); if (shown.length) { idx = (idx - 1 + shown.length) % shown.length; renderPal(); } }
+    else if (e.key === 'Enter') { e.preventDefault(); choose(idx); }
+    else if (e.key === 'Tab') { e.preventDefault(); palInput.focus(); }
+  });
+})();
+</script>
+
+<!-- Formspree AJAX library: handles the contact form submission, field level
+     validation errors, and the success and error messages, without a page reload -->
+<script>
+  window.formspree = window.formspree || function () { (formspree.q = formspree.q || []).push(arguments); };
+  formspree('initForm', { formElement: '#contactForm', formId: 'mnpqnzen' });
+</script>
+<script src="https://unpkg.com/@formspree/ajax@1" defer></script>
+
+</body>
+</html>
